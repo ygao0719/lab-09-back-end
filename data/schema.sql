@@ -16,16 +16,17 @@ CREATE TABLE weathers (
   location_id INTEGER REFERENCES locations(id)
 );
 
-CREATE TABLE IF NOT EXISTS events(
+CREATE TABLE events(
   id  SERIAL PRIMARY KEY,
   link VARCHAR(255),
   name VARCHAR(255),
   event_date CHAR(15),
   summary VARCHAR(1000),
+  created_at BIGINT,
   location_id INTEGER REFERENCES locations(id)
 );
 
-CREATE TABLE IF NOT EXISTS movies(
+CREATE TABLE movies(
   id  SERIAL PRIMARY KEY,
   title VARCHAR(255),  
   overview VARCHAR(255),
@@ -33,18 +34,18 @@ CREATE TABLE IF NOT EXISTS movies(
   total_votes INTEGER,
   popularity DECIMAL,
   released_on CHAR(15),
+  created_at BIGINT,
   location_id INTEGER REFERENCES locations(id)
 );
 
-CREATE TABLE IF NOT EXISTS yelp(
+CREATE TABLE yelp(
   id  SERIAL PRIMARY KEY,
   name VARCHAR(255),  
   image_url VARCHAR(255),
   price CHAR(5),
   rating DECIMAL,
   url VARCHAR(255),
+  created_at BIGINT,
   location_id INTEGER REFERENCES locations(id)
 );
-
-
 

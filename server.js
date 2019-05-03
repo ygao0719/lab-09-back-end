@@ -30,7 +30,6 @@ app.get('/yelp', getYelp);
 // Make sure the server is listening for requests
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-
 // Error handler
 function handleError(err, res) {
   console.error(err);
@@ -45,6 +44,15 @@ function lookup(options) {
   client.query(SQL, values)
     .then(result => {
       if (result.rowCount > 0) {
+        // if we get results from query, check time
+        let dataCreatedTime = data.rows[0].created_at;
+        let now = Date.now();
+        if (now - dataCreatedTime > timeouts[tableName]) {
+          // delete old data from the database
+          let deleteStatement = `DELETE FROM ${tableName} WHERE location_id = $1`;
+
+
+
         options.cacheHit(result);
       } else {
         options.cacheMiss();
@@ -149,6 +157,7 @@ Movie.prototype = {
     client.query(SQL, values);
   }
 };
+
 //yelp
 function Yelp(yelp){
   this.name = yelp.name;
@@ -171,6 +180,21 @@ Yelp.prototype= {
   }
 };
 
+/* -------------------- TIME HELPERS ---------------------*/
+let weatherTimeout = 15 * 1000;
+function getWeather(request, response) {
+  getData('weather', request, response);
+}
+
+let timeouts = {
+  weather: 15 * 1000
+};
+
+let dataFreshFunctions = {
+  weather: getFreshWeatherData
+};
+
+/* -------------------------ROUTES------------------------*/
 
 function getLocation(request, response) {
   Location.lookupLocation({
@@ -254,7 +278,9 @@ function getEvents(request, response) {
 function getMovies(request,response) {
   Movie.lookup({
     tableName: Movie.tableName,
+
     location: request.query.data.id,
+
     cacheHit: function (result) {
       response.send(result.rows);
     },
@@ -277,10 +303,11 @@ function getMovies(request,response) {
 }
 
 function getYelp(request,response){
-  // console.log(request.query.data);
   Yelp.lookup({
     tableName: Yelp.tableName,
+
     location: request.query.data.id,
+
     cacheHit: function (result) {
       response.send(result.rows);
     },
@@ -301,16 +328,4 @@ function getYelp(request,response){
         .catch(error => handleError(error, response));
     }
   });
-
-
-
-
-
-
-
 }
-
-
-
-
-
