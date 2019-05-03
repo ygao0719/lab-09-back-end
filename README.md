@@ -1,33 +1,34 @@
 # lab-09-back-end
-Number and name of feature: ________________________________
+**Number and name of feature:** 
+1. 20 movies that are relate to location
+2. 20 Yelp businesses for location
+3. Cache invalidation
 
-Estimate of time needed to complete: _____
+**Estimate of time needed to complete:** 4 hours
 
-Start time: _____
+**Start time:** 930 am
 
-Finish time: _____
+**Finish time:** past 2 pm (due to partner power hour)
 
-Actual time needed to complete: _____
+**Actual time needed to complete:** _____
 
 
-
-**Author**: Your Name Goes Here
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Author**: Jen, Yuan
+**Version**: 1.0.0
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+Create routes for movies and yelp. Cache invalidation so information stays updated in db.
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+Google api key
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+node, Express, postgres
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
-
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
+1100 set up working scaffold - tried several and could not 
+1130 finished feature 1
+1210 finished feature 2
 
 ## Credits and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
--->
+CF solution code for lab 09 demo
