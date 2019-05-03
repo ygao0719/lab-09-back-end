@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS yelp(
   image_url VARCHAR(255),
   price CHAR(5),
   rating DECIMAL,
-  URL VARCHAR(255),
+  url VARCHAR(255),
   location_id INTEGER REFERENCES locations(id)
 );
 

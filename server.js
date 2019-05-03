@@ -25,6 +25,7 @@ app.get('/location', getLocation);
 app.get('/weather', getWeather);
 app.get('/events', getEvents);
 app.get('/movies', getMovies);
+app.get('/yelp', getYelp);
 
 // Make sure the server is listening for requests
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -148,6 +149,27 @@ Movie.prototype = {
     client.query(SQL, values);
   }
 };
+//yelp
+function Yelp(yelp){
+  this.name = yelp.name;
+  this.image_url = yelp.image_url;
+  this.price = yelp.price;
+  this.rating = yelp.rating;
+  this.url = yelp.url;
+}
+
+Yelp.tableName = 'yelp';
+Yelp.lookup = lookup;
+
+Yelp.prototype= {
+  save: function (location_id) {
+    const SQL = `INSERT INTO ${this.tableName} (name, image_url, price, rating, url,location_id) VALUES ($1, $2, $3, $4, $5, $6);`;
+    const values = [this.name, this.image_url, this.price, this.rating, this.url,location_id];
+    console.log('yelp statement');
+    client.query(SQL, values);
+    console.log('after yelp statement');
+  }
+};
 
 
 function getLocation(request, response) {
@@ -241,7 +263,7 @@ function getMovies(request,response) {
 
       superagent.get(url)
         .then(result => {
-          console.log(result.body);
+          // console.log(result.body);
           const movies = result.body.results.slice(0,20).map(movieData => {
             const movie = new Movie(movieData);
             movie.save(request.query.data.id);
@@ -252,6 +274,39 @@ function getMovies(request,response) {
         .catch(error => handleError(error, response));
     }
   });
+}
+
+function getYelp(request,response){
+  // console.log(request.query.data);
+  Yelp.lookup({
+    tableName: Yelp.tableName,
+    location: request.query.data.id,
+    cacheHit: function (result) {
+      response.send(result.rows);
+    },
+    cacheMiss: function () {
+      const url = `https://api.yelp.com/v3/businesses/search?location=${request.query.data.latitude},${request.query.data.longitude}`;
+
+      superagent.get(url)
+        .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
+        .then(result => {
+          console.log(result.body);
+          const yelps = result.body.businesses.slice(0,20).map(yelpData => {
+            const business = new Yelp(yelpData);
+            business.save(request.query.data.id);
+            return business;
+          });
+          response.send(yelps);
+        })
+        .catch(error => handleError(error, response));
+    }
+  });
+
+
+
+
+
+
 
 }
 
