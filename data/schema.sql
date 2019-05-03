@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS weather, events, movies, yelp, location;
+DROP TABLE IF EXISTS weathers, events, movies, yelp, locations;
 
 
-CREATE TABLE location (
+CREATE TABLE locations (
   id SERIAL PRIMARY KEY,
   latitude DECIMAL,
   longitude DECIMAL,
@@ -9,20 +9,20 @@ CREATE TABLE location (
   search_query VARCHAR(255)
 );
 
-CREATE TABLE weather (
+CREATE TABLE weathers (
   forecast VARCHAR(255),
   time CHAR(15),
   created_at BIGINT,
-  location_id INTEGER REFERENCES location(id)
+  location_id INTEGER REFERENCES locations(id)
 );
 
 CREATE TABLE IF NOT EXISTS events(
   id  SERIAL PRIMARY KEY,
   link VARCHAR(255),
-  event_name VARCHAR(255),
+  name VARCHAR(255),
   event_date CHAR(15),
   summary VARCHAR(1000),
-  location_id INTEGER REFERENCES location(id)
+  location_id INTEGER REFERENCES locations(id)
 );
 
 CREATE TABLE IF NOT EXISTS movies(
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS movies(
   total_votes INTEGER,
   popularity DECIMAL,
   released_on CHAR(15),
-  location_id INTEGER REFERENCES location(id)
+  location_id INTEGER REFERENCES locations(id)
 );
 
 CREATE TABLE IF NOT EXISTS yelp(
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS yelp(
   price CHAR(5),
   rating DECIMAL,
   URL VARCHAR(255),
-  location_id INTEGER REFERENCES location(id)
+  location_id INTEGER REFERENCES locations(id)
 );
 
 
