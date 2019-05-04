@@ -45,21 +45,6 @@ function lookup(options) {
   client.query(SQL, values)
     .then(result => {
       if (result.rowCount > 0) {
-        // if we get results from query, check time
-        // TODO: check time stamp and call function to handle refresh - write function
-        // console.log('IN LOOKUP!!!', result);
-        // let dataCreatedTime = result.data.rows[0].created_at;
-        // console.log('timeouts: ', timeouts);
-        // let now = Date.now();
-        // console.log('DATE RIGHT NOW! ', Date.now(), ' timeouts ARE: ', timeouts[options.tableName]);
-        // if (now - dataCreatedTime > timeouts[options.tableName]) {
-        //   console.log('time ran out!!!');
-        //   // delete old data from the database
-        //   let deleteStatement = `DELETE FROM ${options.tableName} WHERE location_id = $1;`;
-        //   client.query(deleteStatement, values);
-        //   // refresh from api
-        //   return options.cacheMiss();
-        // } else {
         options.cacheHit(result); //send back results
       } else {
         options.cacheMiss();
