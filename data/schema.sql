@@ -1,51 +1,53 @@
-DROP TABLE IF EXISTS weathers, events, movies, yelp, locations;
+DROP TABLE IF EXISTS weather, event, movie, yelp, location;
 
 
-CREATE TABLE locations (
+CREATE TABLE location (
   id SERIAL PRIMARY KEY,
   latitude DECIMAL,
   longitude DECIMAL,
-  formatted_query VARCHAR(255),
-  search_query VARCHAR(255)
+  formatted_query VARCHAR(555),
+  search_query VARCHAR(555)
 );
 
-CREATE TABLE weathers (
-  forecast VARCHAR(255),
+CREATE TABLE weather (
+  id SERIAL PRIMARY KEY,
+  forecast VARCHAR(555),
   time CHAR(15),
   created_at BIGINT,
-  location_id INTEGER REFERENCES locations(id)
+  location_id INTEGER REFERENCES location(id)
 );
 
-CREATE TABLE events(
+CREATE TABLE event (
   id  SERIAL PRIMARY KEY,
-  link VARCHAR(255),
-  name VARCHAR(255),
+  link VARCHAR(555),
+  name VARCHAR(555),
   event_date CHAR(15),
   summary VARCHAR(1000),
   created_at BIGINT,
-  location_id INTEGER REFERENCES locations(id)
+  location_id INTEGER REFERENCES location(id)
 );
 
-CREATE TABLE movies(
+CREATE TABLE movie (
   id  SERIAL PRIMARY KEY,
-  title VARCHAR(255),  
-  overview VARCHAR(255),
+  title VARCHAR(555),  
+  overview VARCHAR(1000),
   average_votes DECIMAL,
   total_votes INTEGER,
+  image_url VARCHAR(500),
   popularity DECIMAL,
   released_on CHAR(15),
   created_at BIGINT,
-  location_id INTEGER REFERENCES locations(id)
+  location_id INTEGER REFERENCES location(id)
 );
 
-CREATE TABLE yelp(
+CREATE TABLE yelp (
   id  SERIAL PRIMARY KEY,
-  name VARCHAR(255),  
-  image_url VARCHAR(255),
+  name VARCHAR(555),  
+  image_url VARCHAR(500),
   price CHAR(5),
   rating DECIMAL,
-  url VARCHAR(255),
+  url VARCHAR(555),
   created_at BIGINT,
-  location_id INTEGER REFERENCES locations(id)
+  location_id INTEGER REFERENCES location(id)
 );
 
