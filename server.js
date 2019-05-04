@@ -61,7 +61,6 @@ function lookup(options) {
         //   return options.cacheMiss();
         // } else {
         options.cacheHit(result); //send back results
-      //   }
       } else {
         options.cacheMiss();
       }
@@ -234,7 +233,14 @@ function getWeather(request, response) {
     location: request.query.data.id,
 
     cacheHit: function (result) {
-      response.send(result.rows);
+      let checkTime = ( Date.now() - result.rows[0].created_at);
+      if (checkTime > timeouts.weather) { // time expired
+        let deleteStatement = `DELETE FROM ${this.tableName} WHERE location_id = $1;`;
+        client.query(deleteStatement, [ this.location ]);
+        this.cacheMiss(); // get fresh data from api
+      } else {
+        response.send(result.rows);
+      }
     },
 
     cacheMiss: function () {
@@ -261,7 +267,14 @@ function getEvents(request, response) {
     location: request.query.data.id,
 
     cacheHit: function (result) {
-      response.send(result.rows);
+      let checkTime = ( Date.now() - result.rows[0].created_at);
+      if (checkTime > timeouts.weather) { // time expired
+        let deleteStatement = `DELETE FROM ${this.tableName} WHERE location_id = $1;`;
+        client.query(deleteStatement, [ this.location ]);
+        this.cacheMiss(); // get fresh data from api
+      } else {
+        response.send(result.rows);
+      }
     },
 
     cacheMiss: function () {
@@ -289,14 +302,20 @@ function getMovies(request,response) {
     location: request.query.data.id,
 
     cacheHit: function (result) {
-      response.send(result.rows);
+      let checkTime = ( Date.now() - result.rows[0].created_at);
+      if (checkTime > timeouts.weather) { // time expired
+        let deleteStatement = `DELETE FROM ${this.tableName} WHERE location_id = $1;`;
+        client.query(deleteStatement, [ this.location ]);
+        this.cacheMiss(); // get fresh data from api
+      } else {
+        response.send(result.rows);
+      }
     },
     cacheMiss: function () {
       const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${request.query.data.search_query}`;
 
       superagent.get(url)
         .then(result => {
-          // console.log(result.body);
           const movies = result.body.results.slice(0,20).map(movieData => {
             const movie = new Movie(movieData);
             movie.save(request.query.data.id);
@@ -316,7 +335,14 @@ function getYelp(request,response){
     location: request.query.data.id,
 
     cacheHit: function (result) {
-      response.send(result.rows);
+      let checkTime = ( Date.now() - result.rows[0].created_at);
+      if (checkTime > timeouts.weather) { // time expired
+        let deleteStatement = `DELETE FROM ${this.tableName} WHERE location_id = $1;`;
+        client.query(deleteStatement, [ this.location ]);
+        this.cacheMiss(); // get fresh data from api
+      } else {
+        response.send(result.rows);
+      }
     },
     cacheMiss: function () {
       const url = `https://api.yelp.com/v3/businesses/search?location=${request.query.data.latitude},${request.query.data.longitude}`;
@@ -324,7 +350,6 @@ function getYelp(request,response){
       superagent.get(url)
         .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
         .then(result => {
-          console.log(result.body.businesses.slice(0, 20));
           const yelps = result.body.businesses.slice(0,20).map(yelpData => {
             const business = new Yelp(yelpData);
             business.save(request.query.data.id);
