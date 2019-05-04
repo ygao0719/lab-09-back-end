@@ -26,11 +26,11 @@ Google api key
 node, Express, postgres
 
 ## Change Log
-1100 set up working scaffold - tried several and could not 
-1130 finished feature 1
-1210 finished feature 2
-2000 - 2100 debugged
-2130 finished feature 3
+* 1100 set up working scaffold - tried several and could not get them to work
+* 1130 finished feature 1
+* 1210 finished feature 2
+* 2000 - 2100 debugged
+* 2130 finished feature 3
 
 ## Credits and Collaborations
 CF solution code for lab 09 demo
